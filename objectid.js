@@ -26,24 +26,24 @@ var isBuffer = function (obj) {
  * @param {String|Number} arg Can be a 24 byte hex string, 12 byte binary string or a Number.
  * @return {Object} instance of ObjectID.
  */
-function ObjectID(arg) {
-  if(!(this instanceof ObjectID)) return new ObjectID(arg);
-  if(arg && ((arg instanceof ObjectID) || arg._bsontype==="ObjectID"))
-    return arg;
-
+function ObjectID(id) {
+  if(!(this instanceof ObjectID)) return new ObjectID(id);
+  if(id && (id instanceof ObjectID))
+    return id;
+  
   var buf;
 
-  if(isBuffer(arg) || (Array.isArray(arg) && arg.length===12)) {
-    buf = Array.prototype.slice.call(arg);
+  if(isBuffer(id) || (Array.isArray(id) && id.length===12)) {
+    buf = Array.prototype.slice.call(id);
   }
-  else if(typeof arg === "string") {
-    if(arg.length!==12 && !ObjectID.isValid(arg))
+  else if(typeof id === "string") {
+    if(id.length!==12 && !ObjectID.isValid(id))
       throw new Error("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
 
-    buf = buffer(arg);
+    buf = buffer(id);
   }
-  else if(/number|undefined/.test(typeof arg)) {
-    buf = buffer(generate(arg));
+  else if(/number|undefined/.test(typeof id)) {
+    buf = buffer(generate(id));
   }
 
   Object.defineProperty(this, "id", {
